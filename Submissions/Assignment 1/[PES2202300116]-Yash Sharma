@@ -1,0 +1,116 @@
+HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Weather Website</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+    
+        <h1>Weather Website</h1>
+        
+    
+    <div class="container">
+        <div class="search-box">
+        <input type="text" id="cityInput" placeholder="Enter the city name">
+        <button id="searchButton">Search</button>
+        </div>
+        
+        <div id="weatherDisplay">
+            <p><span id="WindSpeed"></span></p>
+            <p><span id="Pressure"></span></p>
+            
+        </div>
+    </div>
+        
+    
+    <script src="script.js"></script>
+</body>
+</html>
+
+CSS
+
+body {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: #f9f9f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {                          
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #dbe56d;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    background-color: rgb(220, 220, 38);
+    text-align: center;
+    padding: 10px;
+    font-size: 40px;
+    border: 2px solid ;
+    border-radius: 3px;
+    
+    
+}
+
+.search-box {
+    margin-bottom: 20px;
+    padding-top: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.weather-info p {
+    font-size: 18px;
+    margin: 10px 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+Javascript
+const apiKey = '21a8bf5f8f6d9f09ceb368d268ad1c6f';
+
+document.getElementById('searchButton').addEventListener('click', () => {
+    const city = document.getElementById('cityInput').value;
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+            const weatherDisplay = document.getElementById('weatherDisplay');
+            weatherDisplay.innerHTML = `
+                <h2>Weather in ${data.name}, ${data.sys.country}</h2>
+                <p>Temperature: ${Math.round(data.main.temp - 273.15)}°C</p>
+                <p>Weather: ${data.weather[0].description}</p>
+                <p>Humidity: ${data.main.humidity}%</p>
+                <p>Wind Speed: ${data.wind.speed} m/s</p>
+            `;
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+        });
+});
